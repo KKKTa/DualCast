@@ -8,7 +8,7 @@ This project uses [Poetry](https://python-poetry.org/) for dependency management
 
 ### Clone the repository
 ```sh
-$ git clone [https://github.com/yourusername/DualCast.git]
+$ git clone https://github.com/KKKTa/DualCast.git
 ```
 
 ### Poetry install (optional)
