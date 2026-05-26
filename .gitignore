@@ -1,0 +1,8 @@
+.DS_Store
+._*
+.vscode
+_results
+logs
+.venv
+*__pycache__/
+test.ipynb
