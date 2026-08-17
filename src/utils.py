@@ -524,19 +524,52 @@ def transpose_Hm(Hm, M, m):
     return np.transpose(Hm, axes)
 
 
+# def get_k_nl(k, dim):
+#     if dim == 1:
+#         return 0, np.zeros((1, 1), dtype="i8")
+#     sta = np.arange(k + 1)
+
+#     comb_iterator = it.combinations(sta, dim)
+
+#     comb_list = np.array(
+#         list(comb_iterator)[k:],
+#         dtype="i8",
+#     )
+
+#     return len(comb_list), comb_list
+
 def get_k_nl(k, dim):
-    if dim == 1:
-        return 0, np.zeros((1, 1), dtype="i8")
-    sta = np.arange(k + 1)
-
-    comb_iterator = it.combinations(sta, dim)
-
-    comb_list = np.array(
-        list(comb_iterator)[k:],
-        dtype="i8",
-    )
-
-    return len(comb_list), comb_list
+    if dim == 1: 
+        return 0, np.zeros((1,1),dtype='i8')
+    
+    comb_list = []
+    
+    # 2次項の相互作用 (s_i * s_j)
+    if dim >= 2:
+        for i in range(1, k+1):
+            for j in range(i+1, k+1):
+                comb = [0] * (dim - 2) + [i, j]
+                comb_list.append(comb)
+                
+    # 3次項の相互作用 (s_i * s_j * s_l)
+    if dim >= 3:
+        for i in range(1, k+1):
+            for j in range(i+1, k+1):
+                for l in range(j+1, k+1):
+                    comb = [0] * (dim - 3) + [i, j, l]
+                    comb_list.append(comb)
+                    
+    # 4次項の相互作用 (s_i * s_j * s_l * s_m)
+    if dim >= 4:
+        for i in range(1, k+1):
+            for j in range(i+1, k+1):
+                for l in range(j+1, k+1):
+                    for m in range(l+1, k+1):
+                        comb = [0] * (dim - 4) + [i, j, l, m]
+                        comb_list.append(comb)
+                        
+    comb_array = np.array(comb_list, dtype='i8')
+    return len(comb_array), comb_array
 
 
 def make_feature_names(k, dim, features=None):

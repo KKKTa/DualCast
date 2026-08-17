@@ -20,7 +20,7 @@ import lmfit
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorly as tl
-from numba import njit
+from numba import njit, prange
 from numpy.linalg import pinv
 from tensorly.cp_tensor import cp_to_tensor
 from tensorly.metrics.regression import RMSE
@@ -101,7 +101,10 @@ def update_AF(
     kl,
     k_nl,
 ):
-    bound_nl = int(kl / 2)
+    # bound_nl = int(kl / 2)
+    # bound_nl = kl  # linear
+    # bound_nl = -1  # nonlinear
+    bound_nl = 3  # nonlinear
 
     A_blocks = extract_diag_blocks(A, kq, kq, kl)
     F_blocks = extract_diag_blocks(F, kq, k_nl, kl)
@@ -110,7 +113,7 @@ def update_AF(
     A = np.zeros((kq * kl, kq * kl))
     F = np.zeros((kq * kl, k_nl * kl))
 
-    for blk in range(kl):
+    for blk in prange(kl):
         i_start = blk * kq
         i_end = (blk + 1) * kq
 
